@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Hábitos">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hábitos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0a0a0f; min-height: 100vh; color: white; }
+
+    header { background: #0a0a0f; padding: 40px 20px 72px; text-align: center; position: relative; overflow: hidden; z-index: 1; }
+    .racha-header { position: absolute; top: 14px; right: 14px; background: rgba(251,146,60,0.2); border: 1.5px solid rgba(251,146,60,0.5); color: #fb923c; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 800; z-index: 10; display: block !important; box-shadow: 0 0 16px rgba(251,146,60,0.25); }
+    header::before { content: ''; position: absolute; width: 320px; height: 320px; background: radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%); top: -60px; left: 50%; transform: translateX(-50%); pointer-events: none; }
+    .logo { width: 72px; height: 72px; background: #111118; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 36px; box-shadow: 0 0 40px rgba(124,58,237,0.4); }
+    header h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+    header p  { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 6px; }
+
+    .stats { display: flex; gap: 10px; max-width: 620px; margin: -40px auto 28px; padding: 0 16px; position: relative; z-index: 10; }
+    .stat { flex: 1; background: #111118; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 18px 8px; text-align: center; }
+    .stat .num { font-size: 36px; font-weight: 800; line-height: 1; }
+    .stat .lbl { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat.s1 { border-color: rgba(167,139,250,0.25); } .stat.s2 { border-color: rgba(251,191,36,0.25); }
+    .stat.s3 { border-color: rgba(52,211,153,0.25); }  .stat.s4 { border-color: rgba(248,113,113,0.25); }
+    .stat.s1 .num { color: #a78bfa; text-shadow: 0 0 30px rgba(167,139,250,0.8); }
+    .stat.s2 .num { color: #fbbf24; text-shadow: 0 0 30px rgba(251,191,36,0.8); }
+    .stat.s3 .num { color: #34d399; text-shadow: 0 0 30px rgba(52,211,153,0.8); }
+    .stat.s4 .num { color: #f87171; text-shadow: 0 0 30px rgba(248,113,113,0.8); }
+
+    main { max-width: 620px; margin: 0 auto; padding: 0 16px 60px; }
+    .card { background: #111118; border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 22px; margin-bottom: 16px; }
+    .card h2 { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+
+    .campo { margin-bottom: 12px; }
+    .campo label { display: block; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.3); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.7px; }
+    .campo input, .campo select { width: 100%; padding: 11px 14px; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; font-size: 14px; font-family: 'Inter', sans-serif; color: white; background: #0a0a0f; transition: border-color 0.2s, box-shadow 0.2s; outline: none; }
+    .campo input::placeholder { color: rgba(255,255,255,0.18); }
+    .campo input:focus, .campo select:focus { border-color: rgba(124,58,237,0.6); box-shadow: 0 0 0 3px rgba(124,58,237,0.12); }
+    .campo select option { background: #111118; }
+    .fila { display: flex; gap: 12px; } .fila .campo { flex: 1; }
+
+    .btn-add { width: 100%; padding: 13px; background: white; color: #0a0a0f; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.2s, transform 0.15s; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-add:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .notif-banner { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.2); border-radius: 14px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .notif-banner p { font-size: 12px; color: rgba(167,139,250,0.9); }
+    .btn-notif { background: rgba(124,58,237,0.3); color: #c4b5fd; border: 1px solid rgba(124,58,237,0.3); border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; white-space: nowrap; }
+
+    .filtros { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .filtro { padding: 7px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); background: #111118; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.2s; }
+    .filtro.activo, .filtro:hover { background: white; color: #0a0a0f; border-color: white; font-weight: 700; }
+
+    .habito { background: #111118; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; animation: aparecer 0.25s ease; position: relative; overflow: hidden; cursor: pointer; transition: background 0.2s; }
+    .habito:hover { background: #15151f; }
+    .habito::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 3px 0 0 3px; }
+    .habito.cat-Salud::before { background: #34d399; } .habito.cat-Estudio::before { background: #a78bfa; } .habito.cat-Deporte::before { background: #fbbf24; }
+    @keyframes aparecer { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .icono-cat { width: 40px; height: 40px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .icono-cat.Salud { background: rgba(52,211,153,0.1); } .icono-cat.Estudio { background: rgba(167,139,250,0.1); } .icono-cat.Deporte { background: rgba(251,191,36,0.1); }
+    .habito-info { flex: 1; min-width: 0; }
+    .habito-info h3 { font-size: 14px; font-weight: 600; color: white; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .habito-info p  { font-size: 12px; color: rgba(255,255,255,0.28); margin-bottom: 5px; }
+    .habito-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge.No-iniciado   { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); }
+    .badge.En-progreso   { background: rgba(251,191,36,0.12);  color: #fbbf24; }
+    .badge.Logrado       { background: rgba(52,211,153,0.12);  color: #34d399; }
+    .badge.No-completado { background: rgba(248,113,113,0.12); color: #f87171; }
+    .badge-hora { background: rgba(124,58,237,0.15); color: #a78bfa; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-racha { background: rgba(251,146,60,0.15); color: #fb923c; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+
+    .acciones-habito { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+    .sel-estado { padding: 6px 8px; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; font-size: 11px; font-family: 'Inter', sans-serif; color: rgba(255,255,255,0.7); background: #0a0a0f; cursor: pointer; outline: none; }
+    .sel-estado option { background: #111118; }
+    .btn-del { background: transparent; color: rgba(248,113,113,0.5); border: 1px solid rgba(248,113,113,0.12); border-radius: 8px; padding: 6px 10px; font-size: 11px; cursor: pointer; font-weight: 600; }
+    .btn-del:hover { background: rgba(248,113,113,0.08); color: #f87171; }
+
+    .vacio { text-align: center; padding: 50px 20px; }
+    .vacio .rayo { font-size: 48px; opacity: 0.12; margin-bottom: 12px; }
+    .vacio p { font-size: 13px; color: rgba(255,255,255,0.2); line-height: 1.6; }
+
+    /* ── MODAL CENTRADO ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+    .modal-overlay.visible { opacity: 1; pointer-events: all; }
+    .modal { background: #111118; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; width: 100%; max-width: 500px; padding: 24px; transform: scale(0.92); transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1); max-height: 90vh; overflow-y: auto; }
+    .modal-overlay.visible .modal { transform: scale(1); }
+
+    .modal-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin: 0 auto 20px; }
+    .modal-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+    .modal-icono { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .modal-icono.Salud { background: rgba(52,211,153,0.12); } .modal-icono.Estudio { background: rgba(167,139,250,0.12); } .modal-icono.Deporte { background: rgba(251,191,36,0.12); }
+    .modal-titulo { flex: 1; }
+    .modal-titulo h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .modal-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+    .btn-cerrar { background: rgba(255,255,255,0.06); border: none; color: rgba(255,255,255,0.4); width: 34px; height: 34px; border-radius: 10px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    .info-fecha { background: #0a0a0f; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .info-fecha .fi-label { font-size: 10px; color: rgba(255,255,255,0.28); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 2px; }
+    .info-fecha .fi-val   { font-size: 13px; color: rgba(255,255,255,0.8); }
+
+    .separador { height: 1px; background: rgba(255,255,255,0.06); margin: 14px 0; }
+
+    .edit-campo { margin-bottom: 10px; }
+    .edit-campo label { display: block; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.3); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .edit-campo input, .edit-campo select, .edit-campo textarea { width: 100%; padding: 10px 12px; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; font-size: 14px; font-family: 'Inter', sans-serif; color: white; background: #0a0a0f; outline: none; transition: border-color 0.2s; resize: vertical; }
+    .edit-campo input:focus, .edit-campo select:focus, .edit-campo textarea:focus { border-color: rgba(124,58,237,0.5); box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+    .edit-campo select option { background: #111118; }
+    .edit-fila { display: flex; gap: 10px; } .edit-fila .edit-campo { flex: 1; }
+
+    .modal-btns { display: flex; gap: 10px; margin-top: 10px; }
+    .mbtn { flex: 1; padding: 13px; border-radius: 12px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.2s, transform 0.15s; }
+    .mbtn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .mbtn.guardar   { background: #a78bfa; color: #0a0a0f; }
+    .mbtn.completar { background: #34d399; color: #0a0a0f; }
+    .mbtn.del       { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.15); }
+
+    /* ── DIÁLOGO RECORDATORIO CENTRADO ── */
+    .rec-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(14px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+    .rec-overlay.visible { opacity: 1; pointer-events: all; }
+    .rec-dialog { background: #111118; border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; padding: 36px 28px; width: 100%; max-width: 340px; text-align: center; transform: scale(0.88); transition: transform 0.35s cubic-bezier(0.34,1.2,0.64,1); }
+    .rec-overlay.visible .rec-dialog { transform: scale(1); }
+    .rec-emoji { font-size: 56px; margin-bottom: 16px; display: block; animation: pulse 1s infinite alternate; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.08); } }
+    .rec-titulo { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+    .rec-nombre { font-size: 16px; color: #a78bfa; font-weight: 600; margin-bottom: 8px; }
+    .rec-sub { font-size: 13px; color: rgba(255,255,255,0.35); margin-bottom: 28px; }
+    .rec-btns { display: flex; gap: 12px; }
+    .rec-btn { flex: 1; padding: 14px; border-radius: 14px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: transform 0.15s, opacity 0.2s; }
+    .rec-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .rec-btn.aceptar  { background: #34d399; color: #0a0a0f; }
+    .rec-btn.rechazar { background: rgba(248,113,113,0.15); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="racha-header" id="racha-header">
+    🔥 <span id="racha-max">0</span> días
+  </div>
+  <div class="logo">⚡</div>
+  <h1>⚡ Hábitos ⚡</h1>
+  <p>Construye mejores hábitos cada día</p>
+</header>
+
+<div class="stats">
+  <div class="stat s1"><div class="num" id="cnt-total">0</div><div class="lbl">Total</div></div>
+  <div class="stat s2"><div class="num" id="cnt-prog">0</div><div class="lbl">Progreso</div></div>
+  <div class="stat s3"><div class="num" id="cnt-log">0</div><div class="lbl">Logrados</div></div>
+  <div class="stat s4"><div class="num" id="cnt-nocomp">0</div><div class="lbl">Sin hacer</div></div>
+</div>
+
+<main>
+  <div class="notif-banner" id="banner-notif">
+    <p>🔔 Activa las notificaciones para recordatorios</p>
+    <button class="btn-notif" onclick="pedirPermiso()">Activar</button>
+  </div>
+
+  <div class="card">
+    <h2>📝 Nuevo hábito</h2>
+    <div class="campo">
+      <label>Nombre</label>
+      <input type="text" id="nombre" placeholder="Ej: Beber 2 litros de agua">
+    </div>
+    <div class="fila">
+      <div class="campo">
+        <label>Categoría</label>
+        <select id="categoria">
+          <option value="">-- Elige --</option>
+          <option value="Salud">💚 Salud</option>
+          <option value="Estudio">💜 Estudio</option>
+          <option value="Deporte">🧡 Deporte</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Estado inicial</label>
+        <select id="estado">
+          <option value="No iniciado">No iniciado</option>
+          <option value="En progreso">En progreso</option>
+          <option value="Logrado">Logrado</option>
+          <option value="No completado">No completado</option>
+        </select>
+      </div>
+    </div>
+    <div class="fila">
+      <div class="campo">
+        <label>Descripción</label>
+        <input type="text" id="descripcion" placeholder="Ej: Antes del desayuno">
+      </div>
+      <div class="campo">
+        <label>⏰ Recordatorio</label>
+        <input type="time" id="recordatorio">
+      </div>
+    </div>
+    <button class="btn-add" onclick="crearHabito()"><span>🔥</span> Añadir hábito</button>
+  </div>
+
+  <div class="filtros">
+    <span class="filtro activo" onclick="filtrar('Todos', this)">Todos</span>
+    <span class="filtro" onclick="filtrar('Salud', this)">💚 Salud</span>
+    <span class="filtro" onclick="filtrar('Estudio', this)">💜 Estudio</span>
+    <span class="filtro" onclick="filtrar('Deporte', this)">🧡 Deporte</span>
+    <span class="filtro" onclick="filtrar('No completado', this)">❌ Sin hacer</span>
+  </div>
+
+  <div id="lista"></div>
+</main>
+
+<!-- ── MODAL DETALLE / EDICIÓN ── -->
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarModalFuera(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-icono" id="m-icono"></div>
+      <div class="modal-titulo">
+        <h2 id="m-nombre-titulo"></h2>
+        <div class="modal-badges">
+          <span class="badge" id="m-badge"></span>
+          <span class="badge-hora" id="m-hora-badge" style="display:none"></span>
+        </div>
+      </div>
+      <button class="btn-cerrar" onclick="cerrarModal()">✕</button>
+    </div>
+
+    <div class="info-fecha">
+      <span style="font-size:18px">📅</span>
+      <div>
+        <span class="fi-label">Fecha de creación</span>
+        <span class="fi-val" id="m-fecha">—</span>
+      </div>
+    </div>
+
+    <div class="separador"></div>
+
+    <div class="edit-campo">
+      <label>Nombre</label>
+      <input type="text" id="e-nombre" placeholder="Nombre del hábito">
+    </div>
+    <div class="edit-campo">
+      <label>📝 Qué debo hacer</label>
+      <textarea id="e-descripcion" rows="2" placeholder="Describe qué debes hacer..."></textarea>
+    </div>
+    <div class="edit-fila">
+      <div class="edit-campo">
+        <label>Categoría</label>
+        <select id="e-categoria">
+          <option value="Salud">💚 Salud</option>
+          <option value="Estudio">💜 Estudio</option>
+          <option value="Deporte">🧡 Deporte</option>
+        </select>
+      </div>
+      <div class="edit-campo">
+        <label>⏰ Recordatorio</label>
+        <input type="time" id="e-recordatorio">
+      </div>
+    </div>
+    <div class="edit-campo">
+      <label>Estado</label>
+      <select id="e-estado">
+        <option>No iniciado</option>
+        <option>En progreso</option>
+        <option>Logrado</option>
+        <option>No completado</option>
+      </select>
+    </div>
+
+    <div class="modal-btns">
+      <button class="mbtn guardar" onclick="guardarCambios()">💾 Guardar cambios</button>
+    </div>
+    <div class="modal-btns">
+      <button class="mbtn completar" onclick="marcarCompletado()">✅ Completado</button>
+      <button class="mbtn del"      onclick="eliminarDesdeModal()">🗑 Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DIÁLOGO RECORDATORIO ── -->
+<div class="rec-overlay" id="rec-overlay">
+  <div class="rec-dialog">
+    <span class="rec-emoji">⏰</span>
+    <div class="rec-titulo">¡Hora de tu hábito!</div>
+    <div class="rec-nombre" id="rec-nombre"></div>
+    <div class="rec-sub">¿Lo empezamos ahora?</div>
+    <div class="rec-btns">
+      <button class="rec-btn aceptar"  onclick="aceptarRecordatorio()">✅ Aceptar</button>
+      <button class="rec-btn rechazar" onclick="rechazarRecordatorio()">❌ Rechazar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:3000/api/habitos';
+  let todos = [];
+  let filtroActual = 'Todos';
+  let habitoActual = null;
+  let habitoRecordatorio = null;
+  const iconos = { Salud: '💚', Estudio: '📚', Deporte: '🏃' };
+  const notificadosHoy = new Set();
+  let colaRecordatorios = [];
+  let mostrandoRecordatorio = false;
+
+  if (Notification.permission === 'granted') {
+    document.getElementById('banner-notif').style.display = 'none';
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', async e => {
+      if (e.data.type === 'CAMBIAR_ESTADO') {
+        await cambiarEstado(e.data.habitoId, e.data.estado);
+      }
+    });
+  }
+
+  async function pedirPermiso() {
+    const p = await Notification.requestPermission();
+    if (p === 'granted') {
+      document.getElementById('banner-notif').style.display = 'none';
+      alert('✅ ¡Activadas! A la hora del recordatorio aparecerá un diálogo en pantalla.');
+    } else {
+      alert('⚠️ Sin permiso no funcionan los recordatorios del sistema.');
+    }
+  }
+
+  async function cargarHabitos() {
+    try {
+      const res = await fetch(API);
+      todos = await res.json();
+      actualizarStats();
+      renderizar();
+      gestionarRachaUso();
+    } catch(e) {
+      console.log('Error cargando:', e);
+    }
+  }
+
+  function actualizarStats() {
+  document.getElementById('cnt-total').textContent  = todos.length;
+  document.getElementById('cnt-prog').textContent   = todos.filter(h => h.estado === 'En progreso').length;
+  document.getElementById('cnt-log').textContent    = todos.filter(h => h.estado === 'Logrado').length;
+  document.getElementById('cnt-nocomp').textContent = todos.filter(h => h.estado === 'No completado').length;
+}
+
+  function filtrar(cat, el) {
+    filtroActual = cat;
+    document.querySelectorAll('.filtro').forEach(f => f.classList.remove('activo'));
+    el.classList.add('activo');
+    renderizar();
+  }
+
+  function renderizar() {
+    const lista = document.getElementById('lista');
+    const habitos = filtroActual === 'Todos' ? todos : todos.filter(h =>
+      filtroActual === 'No completado' ? h.estado === 'No completado' : h.categoria === filtroActual
+    );
+    if (habitos.length === 0) {
+      lista.innerHTML = `<div class="vacio"><div class="rayo">💤</div><p>No hay hábitos aquí todavía.<br>¡Añade el primero!</p></div>`;
+      return;
+    }
+    lista.innerHTML = habitos.map(h => {
+      const bc = h.estado.replace(/ /g, '-');
+      const hl = h.recordatorio ? `<span class="badge-hora">⏰ ${h.recordatorio}</span>` : '';
+      const racha = h.racha > 0 ? `<span class="badge-racha">🔥 ${h.racha} día${h.racha > 1 ? 's' : ''}</span>` : '';
+      return `
+        <div class="habito cat-${h.categoria}" onclick="abrirModal('${h._id}')">
+          <div class="icono-cat ${h.categoria}">${iconos[h.categoria]||'📌'}</div>
+          <div class="habito-info">
+            <h3>${h.nombre}</h3>
+            ${h.descripcion ? `<p>${h.descripcion}</p>` : ''}
+            <div class="habito-meta">
+              <span class="badge ${bc}">${h.estado}</span>${hl}
+            </div>
+          </div>
+          <div class="acciones-habito" onclick="event.stopPropagation()">
+            <select class="sel-estado" onchange="cambiarEstado('${h._id}',this.value)">
+              <option ${h.estado==='No iniciado'   ?'selected':''}>No iniciado</option>
+              <option ${h.estado==='En progreso'   ?'selected':''}>En progreso</option>
+              <option ${h.estado==='Logrado'       ?'selected':''}>Logrado</option>
+              <option ${h.estado==='No completado' ?'selected':''}>No completado</option>
+            </select>
+            <button class="btn-del" onclick="eliminarHabito('${h._id}')">🗑</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── MODAL DETALLE/EDICIÓN ──
+  function abrirModal(id) {
+    const h = todos.find(x => x._id === id);
+    if (!h) return;
+    habitoActual = h;
+    const el = i => document.getElementById(i);
+
+    el('m-icono').className = `modal-icono ${h.categoria}`;
+    el('m-icono').textContent = iconos[h.categoria] || '📌';
+    el('m-nombre-titulo').textContent = h.nombre;
+    const badge = el('m-badge');
+    badge.textContent = h.estado;
+    badge.className = `badge ${h.estado.replace(/ /g,'-')}`;
+    const bh = el('m-hora-badge');
+    if (h.recordatorio) { bh.textContent = `⏰ ${h.recordatorio}`; bh.style.display = 'inline-block'; }
+    else bh.style.display = 'none';
+
+    if (h.createdAt) {
+      const d = new Date(h.createdAt);
+      el('m-fecha').textContent = d.toLocaleDateString('es-ES', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    } else {
+      el('m-fecha').textContent = 'No disponible';
+    }
+
+    el('e-nombre').value       = h.nombre || '';
+    el('e-descripcion').value  = h.descripcion || '';
+    el('e-categoria').value    = h.categoria || 'Salud';
+    el('e-recordatorio').value = h.recordatorio || '';
+    el('e-estado').value       = h.estado || 'No iniciado';
+
+    el('modal-overlay').classList.add('visible');
+  }
+
+  function cerrarModal() {
+    document.getElementById('modal-overlay').classList.remove('visible');
+    habitoActual = null;
+  }
+  function cerrarModalFuera(e) { if (e.target === document.getElementById('modal-overlay')) cerrarModal(); }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+
+  async function guardarCambios() {
+    if (!habitoActual) return;
+    const datos = {
+      nombre:       document.getElementById('e-nombre').value.trim(),
+      descripcion:  document.getElementById('e-descripcion').value.trim(),
+      categoria:    document.getElementById('e-categoria').value,
+      recordatorio: document.getElementById('e-recordatorio').value,
+      estado:       document.getElementById('e-estado').value,
+    };
+    if (!datos.nombre) { alert('El nombre es obligatorio'); return; }
+    await fetch(`${API}/${habitoActual._id}`, {
+      method: 'PUT', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(datos)
+    });
+    cerrarModal();
+    cargarHabitos();
+  }
+
+  async function marcarCompletado() {
+    if (!habitoActual) return;
+    await cambiarEstado(habitoActual._id, 'Logrado');
+    cerrarModal();
+  }
+
+  async function eliminarDesdeModal() {
+    if (!habitoActual || !confirm(`¿Eliminar "${habitoActual.nombre}"?`)) return;
+    await fetch(`${API}/${habitoActual._id}`, { method: 'DELETE' });
+    cerrarModal(); cargarHabitos();
+  }
+
+  // ── CRUD ──
+  async function crearHabito() {
+    const nombre       = document.getElementById('nombre').value.trim();
+    const categoria    = document.getElementById('categoria').value;
+    const estado       = document.getElementById('estado').value;
+    const descripcion  = document.getElementById('descripcion').value.trim();
+    const recordatorio = document.getElementById('recordatorio').value;
+    if (!nombre)    { alert('El nombre es obligatorio'); return; }
+    if (!categoria) { alert('Elige una categoría'); return; }
+    await fetch(API, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ nombre, categoria, estado, descripcion, recordatorio })
+    });
+    document.getElementById('nombre').value = '';
+    document.getElementById('descripcion').value = '';
+    document.getElementById('recordatorio').value = '';
+    cargarHabitos();
+  }
+
+  async function cambiarEstado(id, estado) {
+    await fetch(`${API}/${id}`, {
+      method: 'PUT', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ estado })
+    });
+    cargarHabitos();
+  }
+
+  async function eliminarHabito(id) {
+    if (!confirm('¿Eliminar este hábito?')) return;
+    await fetch(`${API}/${id}`, { method: 'DELETE' });
+    cargarHabitos();
+  }
+
+  // ── RECORDATORIOS CON COLA ──
+  function comprobarRecordatorios() {
+    const ahora = new Date();
+    const horaActual = `${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
+
+    todos.forEach(h => {
+      if (!h.recordatorio || h.recordatorio !== horaActual) return;
+      const clave = `${h._id}-${ahora.toDateString()}-${horaActual}`;
+      if (notificadosHoy.has(clave) || h.estado === 'Logrado') return;
+      notificadosHoy.add(clave);
+      colaRecordatorios.push(h);
+    });
+
+    mostrarSiguienteRecordatorio();
+  }
+
+  function mostrarSiguienteRecordatorio() {
+    if (mostrandoRecordatorio || colaRecordatorios.length === 0) return;
+    mostrandoRecordatorio = true;
+    habitoRecordatorio = colaRecordatorios.shift();
+    document.getElementById('rec-nombre').textContent = habitoRecordatorio.nombre;
+    document.getElementById('rec-overlay').classList.add('visible');
+
+    // Notificación del sistema también
+    if (Notification.permission === 'granted' && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'MOSTRAR_NOTIFICACION',
+        habitoId: habitoRecordatorio._id,
+        nombre: habitoRecordatorio.nombre
+      });
+    }
+  }
+
+  async function aceptarRecordatorio() {
+    document.getElementById('rec-overlay').classList.remove('visible');
+    mostrandoRecordatorio = false;
+    if (habitoRecordatorio && habitoRecordatorio.estado !== 'Logrado') {
+      await cambiarEstado(habitoRecordatorio._id, 'En progreso');
+    }
+    habitoRecordatorio = null;
+    setTimeout(mostrarSiguienteRecordatorio, 600);
+  }
+
+  async function rechazarRecordatorio() {
+    document.getElementById('rec-overlay').classList.remove('visible');
+    mostrandoRecordatorio = false;
+    if (habitoRecordatorio) {
+      await cambiarEstado(habitoRecordatorio._id, 'No completado');
+    }
+    habitoRecordatorio = null;
+    setTimeout(mostrarSiguienteRecordatorio, 600);
+  }
+
+  async function comprobarMedianoche() {
+    const ahora = new Date();
+    if (ahora.getHours() === 23 && ahora.getMinutes() === 59) {
+      for (const h of todos) {
+        if (h.estado === 'En progreso') await cambiarEstado(h._id, 'No completado');
+      }
+    }
+  }
+
+  cargarHabitos();
+  setInterval(comprobarRecordatorios, 30000);
+  setInterval(cargarHabitos, 30000);
+  setInterval(comprobarMedianoche, 60000);
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log('✅ SW registrado'))
+      .catch(err => console.log('❌ SW:', err));
+  }
+  // ── RACHA DE USO DIARIO ──
+function gestionarRachaUso() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const ayer = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  const ultimaVisita = localStorage.getItem('ultimaVisita') || '';
+  let rachaUso = parseInt(localStorage.getItem('rachaUso') || '0');
+
+  if (ultimaVisita === hoy) {
+    // Ya visitó hoy, no cambia
+  } else if (ultimaVisita === ayer) {
+    // Día consecutivo
+    rachaUso += 1;
+  } else {
+    // Reinicia racha
+    rachaUso = 1;
+  }
+
+  localStorage.setItem('ultimaVisita', hoy);
+  localStorage.setItem('rachaUso', rachaUso);
+
+  // Mostrar siempre en el encabezado
+  const el = document.getElementById('racha-header');
+  const elNum = document.getElementById('racha-max');
+  if (el && elNum) {
+    elNum.textContent = rachaUso;
+    el.style.display = 'block';
+  }
+}
+
+gestionarRachaUso();
+</script>
+</body>
+</html>
