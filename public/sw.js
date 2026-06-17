@@ -1,4 +1,4 @@
-const CACHE = 'habitoapp-v11';
+const CACHE = 'habitoapp-v12';
 const ARCHIVOS = ['/', '/index.html', '/manifest.json'];
 
 // Instalar y cachear archivos estáticos

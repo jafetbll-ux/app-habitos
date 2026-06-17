@@ -13,12 +13,32 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: #0a0a0f; min-height: 100vh; color: white; }
 
+    /* ── LOGIN ── */
+    .login-overlay { position: fixed; inset: 0; background: #0a0a0f; z-index: 500; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+    .login-box { background: #111118; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 32px 28px; width: 100%; max-width: 380px; }
+    .login-logo { width: 64px; height: 64px; background: #0a0a0f; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 30px; box-shadow: 0 0 32px rgba(124,58,237,0.45); }
+    .login-titulo { text-align: center; font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .login-sub { text-align: center; font-size: 13px; color: rgba(255,255,255,0.35); margin-bottom: 24px; }
+    .login-tabs { display: flex; background: #0a0a0f; border-radius: 12px; padding: 4px; margin-bottom: 22px; }
+    .login-tab { flex: 1; text-align: center; padding: 9px; border-radius: 9px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.2s; }
+    .login-tab.activo { background: #7c3aed; color: white; }
+    .login-error { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.25); color: #f87171; padding: 10px 14px; border-radius: 10px; font-size: 12px; margin-bottom: 14px; display: none; }
+    .btn-login { width: 100%; padding: 13px; background: white; color: #0a0a0f; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px; font-family: 'Inter', sans-serif; }
+    .btn-login:hover { opacity: 0.9; }
+    .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .user-bar { position: absolute; top: 14px; left: 14px; display: flex; align-items: center; gap: 8px; z-index: 10; }
+    .user-bar .user-name { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 600; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .btn-logout { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-logout:hover { background: rgba(248,113,113,0.15); color: #f87171; border-color: rgba(248,113,113,0.3); }
+
     header { background: #0a0a0f; padding: 40px 20px 72px; text-align: center; position: relative; overflow: hidden; z-index: 1; }
-    .racha-header { position: absolute; top: 14px; right: 14px; background: rgba(251,146,60,0.2); border: 1.5px solid rgba(251,146,60,0.5); color: #fb923c; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 800; z-index: 10; display: block !important; box-shadow: 0 0 16px rgba(251,146,60,0.25); }
     header::before { content: ''; position: absolute; width: 320px; height: 320px; background: radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%); top: -60px; left: 50%; transform: translateX(-50%); pointer-events: none; }
     .logo { width: 72px; height: 72px; background: #111118; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 36px; box-shadow: 0 0 40px rgba(124,58,237,0.4); }
     header h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
     header p  { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 6px; }
+
+    .racha-header { position: absolute; top: 16px; right: 16px; background: rgba(251,146,60,0.2); border: 1.5px solid rgba(251,146,60,0.5); color: #fb923c; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 800; z-index: 10; display: block !important; box-shadow: 0 0 16px rgba(251,146,60,0.25); }
 
     .stats { display: flex; gap: 10px; max-width: 620px; margin: -40px auto 28px; padding: 0 16px; position: relative; z-index: 10; }
     .stat { flex: 1; background: #111118; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 18px 8px; text-align: center; }
@@ -73,7 +93,6 @@
     .badge.Logrado       { background: rgba(52,211,153,0.12);  color: #34d399; }
     .badge.No-completado { background: rgba(248,113,113,0.12); color: #f87171; }
     .badge-hora { background: rgba(124,58,237,0.15); color: #a78bfa; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-    .badge-racha { background: rgba(251,146,60,0.15); color: #fb923c; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
 
     .acciones-habito { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
     .sel-estado { padding: 6px 8px; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; font-size: 11px; font-family: 'Inter', sans-serif; color: rgba(255,255,255,0.7); background: #0a0a0f; cursor: pointer; outline: none; }
@@ -85,12 +104,10 @@
     .vacio .rayo { font-size: 48px; opacity: 0.12; margin-bottom: 12px; }
     .vacio p { font-size: 13px; color: rgba(255,255,255,0.2); line-height: 1.6; }
 
-    /* ── MODAL CENTRADO ── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
     .modal-overlay.visible { opacity: 1; pointer-events: all; }
     .modal { background: #111118; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; width: 100%; max-width: 500px; padding: 24px; transform: scale(0.92); transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1); max-height: 90vh; overflow-y: auto; }
     .modal-overlay.visible .modal { transform: scale(1); }
-
     .modal-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin: 0 auto 20px; }
     .modal-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
     .modal-icono { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
@@ -120,7 +137,6 @@
     .mbtn.completar { background: #34d399; color: #0a0a0f; }
     .mbtn.del       { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.15); }
 
-    /* ── DIÁLOGO RECORDATORIO CENTRADO ── */
     .rec-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(14px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
     .rec-overlay.visible { opacity: 1; pointer-events: all; }
     .rec-dialog { background: #111118; border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; padding: 36px 28px; width: 100%; max-width: 340px; text-align: center; transform: scale(0.88); transition: transform 0.35s cubic-bezier(0.34,1.2,0.64,1); }
@@ -139,7 +155,56 @@
 </head>
 <body>
 
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">⚡</div>
+    <div class="login-titulo">Hábitos</div>
+    <div class="login-sub">Inicia sesión para ver tus hábitos</div>
+
+    <div class="login-tabs">
+      <div class="login-tab activo" id="tab-login" onclick="mostrarTab('login')">Iniciar sesión</div>
+      <div class="login-tab" id="tab-registro" onclick="mostrarTab('registro')">Registrarse</div>
+    </div>
+
+    <div class="login-error" id="login-error"></div>
+
+    <div id="form-login">
+      <div class="campo">
+        <label>Correo</label>
+        <input type="email" id="login-email" placeholder="tucorreo@ejemplo.com">
+      </div>
+      <div class="campo">
+        <label>Contraseña</label>
+        <input type="password" id="login-password" placeholder="••••••••">
+      </div>
+      <button class="btn-login" id="btn-login" onclick="hacerLogin()">Entrar</button>
+    </div>
+
+    <div id="form-registro" style="display:none">
+      <div class="campo">
+        <label>Nombre</label>
+        <input type="text" id="reg-nombre" placeholder="Tu nombre">
+      </div>
+      <div class="campo">
+        <label>Correo</label>
+        <input type="email" id="reg-email" placeholder="tucorreo@ejemplo.com">
+      </div>
+      <div class="campo">
+        <label>Contraseña</label>
+        <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres">
+      </div>
+      <button class="btn-login" id="btn-registro" onclick="hacerRegistro()">Crear cuenta</button>
+    </div>
+  </div>
+</div>
+
+<div id="app-screen" style="display:none">
+
 <header>
+  <div class="user-bar">
+    <span class="user-name" id="user-name"></span>
+    <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
+  </div>
   <div class="racha-header" id="racha-header">
     🔥 <span id="racha-max">0</span> días
   </div>
@@ -197,7 +262,7 @@
         <input type="time" id="recordatorio">
       </div>
     </div>
-    <button class="btn-add" onclick="crearHabito()"><span>🔥</span> Añadir hábito</button>
+    <button class="btn-add" onclick="crearHabito()"><span>✏️</span> Añadir hábito</button>
   </div>
 
   <div class="filtros">
@@ -211,7 +276,6 @@
   <div id="lista"></div>
 </main>
 
-<!-- ── MODAL DETALLE / EDICIÓN ── -->
 <div class="modal-overlay" id="modal-overlay" onclick="cerrarModalFuera(event)">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -279,7 +343,6 @@
   </div>
 </div>
 
-<!-- ── DIÁLOGO RECORDATORIO ── -->
 <div class="rec-overlay" id="rec-overlay">
   <div class="rec-dialog">
     <span class="rec-emoji">⏰</span>
@@ -293,8 +356,15 @@
   </div>
 </div>
 
+</div>
+
 <script>
   const API = 'https://app-habitos-production.up.railway.app/api/habitos';
+  const AUTH_API = 'https://app-habitos-production.up.railway.app/api/auth';
+
+  let token = localStorage.getItem('token') || '';
+  let nombreUsuario = localStorage.getItem('nombreUsuario') || '';
+
   let todos = [];
   let filtroActual = 'Todos';
   let habitoActual = null;
@@ -304,31 +374,110 @@
   let colaRecordatorios = [];
   let mostrandoRecordatorio = false;
 
-  if (Notification.permission === 'granted') {
-    document.getElementById('banner-notif').style.display = 'none';
+  function decodificarToken(t) {
+    try { return JSON.parse(atob(t.split('.')[1])).id; }
+    catch (e) { return 'anon'; }
   }
 
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener('message', async e => {
-      if (e.data.type === 'CAMBIAR_ESTADO') {
-        await cambiarEstado(e.data.habitoId, e.data.estado);
-      }
-    });
+  function mostrarTab(tab) {
+    document.getElementById('tab-login').classList.toggle('activo', tab === 'login');
+    document.getElementById('tab-registro').classList.toggle('activo', tab === 'registro');
+    document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById('form-registro').style.display = tab === 'registro' ? 'block' : 'none';
+    document.getElementById('login-error').style.display = 'none';
   }
 
-  async function pedirPermiso() {
-    const p = await Notification.requestPermission();
-    if (p === 'granted') {
-      document.getElementById('banner-notif').style.display = 'none';
-      alert('✅ ¡Activadas! A la hora del recordatorio aparecerá un diálogo en pantalla.');
-    } else {
-      alert('⚠️ Sin permiso no funcionan los recordatorios del sistema.');
+  function mostrarErrorLogin(msg) {
+    const el = document.getElementById('login-error');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  async function hacerLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) { mostrarErrorLogin('Completa correo y contraseña'); return; }
+    const btn = document.getElementById('btn-login');
+    btn.disabled = true; btn.textContent = 'Entrando...';
+    try {
+      const res = await fetch(`${AUTH_API}/login`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) { mostrarErrorLogin(data.error || 'Error al iniciar sesión'); return; }
+      guardarSesion(data.token, data.nombre);
+    } catch (e) {
+      mostrarErrorLogin('No se pudo conectar con el servidor');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Entrar';
     }
+  }
+
+  async function hacerRegistro() {
+    const nombre = document.getElementById('reg-nombre').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    if (!nombre || !email || !password) { mostrarErrorLogin('Completa todos los campos'); return; }
+    if (password.length < 6) { mostrarErrorLogin('La contraseña debe tener al menos 6 caracteres'); return; }
+    const btn = document.getElementById('btn-registro');
+    btn.disabled = true; btn.textContent = 'Creando...';
+    try {
+      const res = await fetch(`${AUTH_API}/registro`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ nombre, email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) { mostrarErrorLogin(data.error || 'Error al registrar'); return; }
+      guardarSesion(data.token, data.nombre);
+    } catch (e) {
+      mostrarErrorLogin('No se pudo conectar con el servidor');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Crear cuenta';
+    }
+  }
+
+  function guardarSesion(t, nombre) {
+    token = t; nombreUsuario = nombre;
+    localStorage.setItem('token', t);
+    localStorage.setItem('nombreUsuario', nombre);
+    entrarApp();
+  }
+
+  function cerrarSesion() {
+    if (!confirm('¿Cerrar sesión?')) return;
+    localStorage.removeItem('token');
+    localStorage.removeItem('nombreUsuario');
+    token = ''; nombreUsuario = '';
+    document.getElementById('app-screen').style.display = 'none';
+    document.getElementById('login-overlay').style.display = 'flex';
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-password').value = '';
+  }
+
+  function entrarApp() {
+    document.getElementById('login-overlay').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+    document.getElementById('user-name').textContent = nombreUsuario;
+    if (Notification.permission === 'granted') {
+      document.getElementById('banner-notif').style.display = 'none';
+    }
+    cargarHabitos();
+  }
+
+  async function apiFetch(url, opciones = {}) {
+    opciones.headers = { ...(opciones.headers || {}), 'Authorization': `Bearer ${token}` };
+    const res = await fetch(url, opciones);
+    if (res.status === 401) {
+      cerrarSesion();
+      throw new Error('Sesión expirada');
+    }
+    return res;
   }
 
   async function cargarHabitos() {
     try {
-      const res = await fetch(API);
+      const res = await apiFetch(API);
       todos = await res.json();
       actualizarStats();
       renderizar();
@@ -339,11 +488,11 @@
   }
 
   function actualizarStats() {
-  document.getElementById('cnt-total').textContent  = todos.length;
-  document.getElementById('cnt-prog').textContent   = todos.filter(h => h.estado === 'En progreso').length;
-  document.getElementById('cnt-log').textContent    = todos.filter(h => h.estado === 'Logrado').length;
-  document.getElementById('cnt-nocomp').textContent = todos.filter(h => h.estado === 'No completado').length;
-}
+    document.getElementById('cnt-total').textContent  = todos.length;
+    document.getElementById('cnt-prog').textContent   = todos.filter(h => h.estado === 'En progreso').length;
+    document.getElementById('cnt-log').textContent    = todos.filter(h => h.estado === 'Logrado').length;
+    document.getElementById('cnt-nocomp').textContent = todos.filter(h => h.estado === 'No completado').length;
+  }
 
   function filtrar(cat, el) {
     filtroActual = cat;
@@ -364,7 +513,6 @@
     lista.innerHTML = habitos.map(h => {
       const bc = h.estado.replace(/ /g, '-');
       const hl = h.recordatorio ? `<span class="badge-hora">⏰ ${h.recordatorio}</span>` : '';
-      const racha = h.racha > 0 ? `<span class="badge-racha">🔥 ${h.racha} día${h.racha > 1 ? 's' : ''}</span>` : '';
       return `
         <div class="habito cat-${h.categoria}" onclick="abrirModal('${h._id}')">
           <div class="icono-cat ${h.categoria}">${iconos[h.categoria]||'📌'}</div>
@@ -388,7 +536,6 @@
     }).join('');
   }
 
-  // ── MODAL DETALLE/EDICIÓN ──
   function abrirModal(id) {
     const h = todos.find(x => x._id === id);
     if (!h) return;
@@ -438,7 +585,7 @@
       estado:       document.getElementById('e-estado').value,
     };
     if (!datos.nombre) { alert('El nombre es obligatorio'); return; }
-    await fetch(`${API}/${habitoActual._id}`, {
+    await apiFetch(`${API}/${habitoActual._id}`, {
       method: 'PUT', headers: {'Content-Type':'application/json'},
       body: JSON.stringify(datos)
     });
@@ -454,11 +601,10 @@
 
   async function eliminarDesdeModal() {
     if (!habitoActual || !confirm(`¿Eliminar "${habitoActual.nombre}"?`)) return;
-    await fetch(`${API}/${habitoActual._id}`, { method: 'DELETE' });
+    await apiFetch(`${API}/${habitoActual._id}`, { method: 'DELETE' });
     cerrarModal(); cargarHabitos();
   }
 
-  // ── CRUD ──
   async function crearHabito() {
     const nombre       = document.getElementById('nombre').value.trim();
     const categoria    = document.getElementById('categoria').value;
@@ -467,7 +613,7 @@
     const recordatorio = document.getElementById('recordatorio').value;
     if (!nombre)    { alert('El nombre es obligatorio'); return; }
     if (!categoria) { alert('Elige una categoría'); return; }
-    await fetch(API, {
+    await apiFetch(API, {
       method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ nombre, categoria, estado, descripcion, recordatorio })
     });
@@ -478,7 +624,7 @@
   }
 
   async function cambiarEstado(id, estado) {
-    await fetch(`${API}/${id}`, {
+    await apiFetch(`${API}/${id}`, {
       method: 'PUT', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ estado })
     });
@@ -487,11 +633,28 @@
 
   async function eliminarHabito(id) {
     if (!confirm('¿Eliminar este hábito?')) return;
-    await fetch(`${API}/${id}`, { method: 'DELETE' });
+    await apiFetch(`${API}/${id}`, { method: 'DELETE' });
     cargarHabitos();
   }
 
-  // ── RECORDATORIOS CON COLA ──
+  async function pedirPermiso() {
+    const p = await Notification.requestPermission();
+    if (p === 'granted') {
+      document.getElementById('banner-notif').style.display = 'none';
+      alert('✅ ¡Activadas! A la hora del recordatorio aparecerá un diálogo en pantalla.');
+    } else {
+      alert('⚠️ Sin permiso no funcionan los recordatorios del sistema.');
+    }
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', async e => {
+      if (e.data.type === 'CAMBIAR_ESTADO') {
+        await cambiarEstado(e.data.habitoId, e.data.estado);
+      }
+    });
+  }
+
   function comprobarRecordatorios() {
     const ahora = new Date();
     const horaActual = `${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
@@ -514,7 +677,6 @@
     document.getElementById('rec-nombre').textContent = habitoRecordatorio.nombre;
     document.getElementById('rec-overlay').classList.add('visible');
 
-    // Notificación del sistema también
     if (Notification.permission === 'granted' && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
         type: 'MOSTRAR_NOTIFICACION',
@@ -553,9 +715,37 @@
     }
   }
 
-  cargarHabitos();
+  function gestionarRachaUso() {
+    const uid = decodificarToken(token);
+    const claveVisita = `ultimaVisita_${uid}`;
+    const claveRacha  = `rachaUso_${uid}`;
+
+    const hoy  = new Date().toISOString().split('T')[0];
+    const ayer = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    const ultimaVisita = localStorage.getItem(claveVisita) || '';
+    let rachaUso = parseInt(localStorage.getItem(claveRacha) || '0');
+
+    if (ultimaVisita === hoy) {
+      // ya visitaste hoy, no cambia
+    } else if (ultimaVisita === ayer) {
+      rachaUso += 1;
+    } else {
+      rachaUso = 1;
+    }
+
+    localStorage.setItem(claveVisita, hoy);
+    localStorage.setItem(claveRacha, String(rachaUso));
+
+    const el = document.getElementById('racha-header');
+    const elNum = document.getElementById('racha-max');
+    if (el && elNum) {
+      elNum.textContent = rachaUso;
+      el.style.display = 'block';
+    }
+  }
+
   setInterval(comprobarRecordatorios, 30000);
-  setInterval(cargarHabitos, 30000);
+  setInterval(() => { if (token) cargarHabitos(); }, 30000);
   setInterval(comprobarMedianoche, 60000);
 
   if ('serviceWorker' in navigator) {
@@ -563,36 +753,10 @@
       .then(() => console.log('✅ SW registrado'))
       .catch(err => console.log('❌ SW:', err));
   }
-  // ── RACHA DE USO DIARIO ──
-function gestionarRachaUso() {
-  const hoy = new Date().toISOString().split('T')[0];
-  const ayer = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-  const ultimaVisita = localStorage.getItem('ultimaVisita') || '';
-  let rachaUso = parseInt(localStorage.getItem('rachaUso') || '0');
 
-  if (ultimaVisita === hoy) {
-    // Ya visitó hoy, no cambia
-  } else if (ultimaVisita === ayer) {
-    // Día consecutivo
-    rachaUso += 1;
-  } else {
-    // Reinicia racha
-    rachaUso = 1;
+  if (token) {
+    entrarApp();
   }
-
-  localStorage.setItem('ultimaVisita', hoy);
-  localStorage.setItem('rachaUso', rachaUso);
-
-  // Mostrar siempre en el encabezado
-  const el = document.getElementById('racha-header');
-  const elNum = document.getElementById('racha-max');
-  if (el && elNum) {
-    elNum.textContent = rachaUso;
-    el.style.display = 'block';
-  }
-}
-
-gestionarRachaUso();
 </script>
 </body>
 </html>

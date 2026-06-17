@@ -14,6 +14,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/app-habit
 const habitosRouter = require('./routes/habitos');
 app.use('/api/habitos', habitosRouter);
 
+const authRouter = require('./routes/auth');
+app.use('/api/auth', authRouter);
+
 app.use(express.static('public'));
 
 app.listen(PORT, () => {

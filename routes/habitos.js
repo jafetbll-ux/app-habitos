@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const Habito = require('../models/Habito');
+const verificarToken = require('../middleware/auth');
 
-// Obtener todos
+router.use(verificarToken);
+
 router.get('/', async (req, res) => {
   try {
-    const habitos = await Habito.find();
+    const habitos = await Habito.find({ usuario: req.usuarioId });
     res.json(habitos);
   } catch (err) {
     res.status(500).json({ error: 'Error al obtener hábitos' });
   }
 });
 
-// Crear uno nuevo
 router.post('/', async (req, res) => {
   try {
     const { nombre, categoria, estado, descripcion, recordatorio } = req.body;
@@ -20,7 +21,7 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'El nombre es obligatorio' });
     if (!categoria)
       return res.status(400).json({ error: 'La categoría es obligatoria' });
-    const habito = new Habito({ nombre, categoria, estado, descripcion, recordatorio });
+    const habito = new Habito({ nombre, categoria, estado, descripcion, recordatorio, usuario: req.usuarioId });
     await habito.save();
     res.status(201).json(habito);
   } catch (err) {
@@ -28,43 +29,35 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Actualizar — con lógica de racha
 router.put('/:id', async (req, res) => {
   try {
-    const habito = await Habito.findById(req.params.id);
+    const habito = await Habito.findOne({ _id: req.params.id, usuario: req.usuarioId });
     if (!habito) return res.status(404).json({ error: 'Hábito no encontrado' });
 
     const { estado } = req.body;
-    const hoy = new Date().toISOString().split('T')[0]; // "2026-06-15"
+    const hoy = new Date().toISOString().split('T')[0];
 
-    // Lógica de racha
     if (estado === 'Logrado') {
       if (habito.ultimaFecha === '') {
-        // Primera vez que se completa
         habito.racha = 1;
         habito.ultimaFecha = hoy;
       } else if (habito.ultimaFecha === hoy) {
-        // Ya se completó hoy, no cambia la racha
+        // no cambia
       } else {
         const ayer = new Date();
         ayer.setDate(ayer.getDate() - 1);
         const ayerStr = ayer.toISOString().split('T')[0];
-
         if (habito.ultimaFecha === ayerStr) {
-          // Día consecutivo, incrementa racha
           habito.racha = (habito.racha || 0) + 1;
         } else {
-          // Se rompió la racha, reinicia
           habito.racha = 1;
         }
         habito.ultimaFecha = hoy;
       }
     } else if (estado === 'No completado') {
-      // Se rompió la racha
       habito.racha = 0;
     }
 
-    // Actualizar el resto de campos
     const campos = ['nombre', 'categoria', 'descripcion', 'recordatorio', 'estado'];
     campos.forEach(c => { if (req.body[c] !== undefined) habito[c] = req.body[c]; });
 
@@ -75,10 +68,9 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Eliminar
 router.delete('/:id', async (req, res) => {
   try {
-    await Habito.findByIdAndDelete(req.params.id);
+    await Habito.findOneAndDelete({ _id: req.params.id, usuario: req.usuarioId });
     res.json({ mensaje: 'Hábito eliminado' });
   } catch (err) {
     res.status(500).json({ error: 'Error al eliminar' });

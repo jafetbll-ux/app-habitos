@@ -8,6 +8,7 @@ const habitoSchema = new mongoose.Schema({
   recordatorio: { type: String, default: '' },
   racha:        { type: Number, default: 0 },
   ultimaFecha:  { type: String, default: '' },
+  usuario:      { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Habito', habitoSchema);
